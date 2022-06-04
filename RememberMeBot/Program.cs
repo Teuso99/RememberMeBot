@@ -1,12 +1,26 @@
 ﻿using DSharpPlus;
-using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
+using RememberMeBot;
 
-using IHost host = Host.CreateDefaultBuilder(args).Build();
+var enviroment = Environment.GetEnvironmentVariable("NETCORE_ENVIROMENT");
+
+IConfiguration Config = new ConfigurationBuilder()
+                        .AddJsonFile($"appsettings.json")
+                        .AddJsonFile($"appsettings.{enviroment}.json")
+                        .AddEnvironmentVariables().Build();
+
+var token = Config.GetSection("ConnectionStrings")["DiscordToken"];
 
 var client = new DiscordClient(new DiscordConfiguration
 {
-    Token = "",
+    Token = token,
     TokenType = TokenType.Bot
 });
 
-await host.RunAsync();
+client.AddRememberMeBot();
+
+await client.ConnectAsync();
+
+Console.WriteLine($"Bots onlines!");
+
+await Task.Delay(-1);

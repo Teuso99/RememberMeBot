@@ -1,0 +1,16 @@
+{
+  "profiles": {
+    "RememberMeBot.Dev": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "NETCORE_ENVIROMENT": "Development"
+      }
+    },
+    "RememberMeBot.Prod": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "NETCORE_ENVIROMENT": "Production"
+      }
+    }
+  }
+}
