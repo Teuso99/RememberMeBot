@@ -1,5 +1,8 @@
 ﻿using DSharpPlus;
+using DSharpPlus.CommandsNext;
+using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
+using RememberMeBot.Commands;
 
 namespace RememberMeBot
 {
@@ -7,15 +10,12 @@ namespace RememberMeBot
     {
         public void Initialize(DiscordClient client)
         {
-            client.MessageCreated += OnMesseageCreated;
-        }
-
-        private async Task OnMesseageCreated(DiscordClient client, MessageCreateEventArgs args)
-        {
-            if (args.Message.Content.StartsWith("--"))
+            var commands = client.UseCommandsNext(new CommandsNextConfiguration()
             {
-                await client.SendMessageAsync(args.Channel, "teste");
-            }
+                StringPrefixes = new[] { "!" }
+            });
+
+            commands.RegisterCommands<CommandModule>();
         }
     }
 }

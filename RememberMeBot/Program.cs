@@ -21,6 +21,8 @@ client.AddRememberMeBot();
 
 await client.ConnectAsync();
 
+
+
 Console.WriteLine($"Bots onlines!");
 
 await Task.Delay(-1);
