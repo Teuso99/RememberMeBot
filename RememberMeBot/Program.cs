@@ -1,5 +1,6 @@
 ﻿using DSharpPlus;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using RememberMeBot;
 
 var enviroment = Environment.GetEnvironmentVariable("NETCORE_ENVIROMENT");
@@ -14,7 +15,8 @@ var token = Config.GetSection("ConnectionStrings")["DiscordToken"];
 var client = new DiscordClient(new DiscordConfiguration
 {
     Token = token,
-    TokenType = TokenType.Bot
+    TokenType = TokenType.Bot,
+    MinimumLogLevel = LogLevel.Debug
 });
 
 client.AddRememberMeBot();
