@@ -16,6 +16,8 @@ namespace RememberMeBot
             });
 
             commands.RegisterCommands<CommandModule>();
+
+            commands.SetHelpFormatter<CustomHelpFormatter>();
         }
     }
 }
