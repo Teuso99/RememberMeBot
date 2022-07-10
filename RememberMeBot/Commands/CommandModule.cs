@@ -10,10 +10,12 @@ namespace RememberMeBot.Commands
 {
     public class CommandModule : BaseCommandModule
     {
-        [Command("teste")]
+        [Command("alarm")]
         public async Task TestCommand(CommandContext context, DateTime date)
         {
-            await context.RespondAsync($"vai toma no cu tranquilo falo {date.ToShortTimeString()}");
+            var user = context.Member;
+
+            await context.RespondAsync($"{user?.Mention} set new alarm to {date.ToShortTimeString()}!");
         }
     }
 }
