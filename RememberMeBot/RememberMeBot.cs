@@ -1,7 +1,5 @@
 ﻿using DSharpPlus;
 using DSharpPlus.CommandsNext;
-using DSharpPlus.Entities;
-using DSharpPlus.EventArgs;
 using RememberMeBot.Commands;
 
 namespace RememberMeBot
