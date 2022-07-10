@@ -11,7 +11,7 @@ namespace RememberMeBot.Commands
     public class CommandModule : BaseCommandModule
     {
         [Command("alarm")]
-        public async Task TestCommand(CommandContext context, DateTime date)
+        public async Task CreateAlarmCommand(CommandContext context, DateTime date)
         {
             var user = context.Member;
 
