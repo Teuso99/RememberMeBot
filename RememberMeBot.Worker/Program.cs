@@ -1,8 +1,9 @@
-﻿using RememberMeBot.Worker;
+﻿using RememberMeBot.Resources;
+using RememberMeBot.Worker;
 
 Console.WriteLine("Worker onliners!");
 
-List<DateTime> alarms = new List<DateTime>();
+List<TimeOnly> alarms = new List<TimeOnly>();
 
 while (true)
 {
@@ -10,32 +11,40 @@ while (true)
 
     if (!string.IsNullOrEmpty(alarm))
     {
+        Console.WriteLine("ae pora pegou a queue");
+
         AddAlarm(alarm);
     }
 
     if (alarms.Any())
     {
+        Console.WriteLine("ae pora ta tentando mandar pra queue");
+
         CheckAlarms(alarms);
     }
-
 }
 
 void AddAlarm(string alarm)
 {
-    var alarmTime = DateTime.Parse(alarm);
+    var alarmTime = TimeOnly.Parse(alarm);
 
-    var alarmDateTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, alarmTime.Hour, alarmTime.Minute, alarmTime.Second);
-
-    alarms.Add(alarmDateTime);
+    alarms.Add(alarmTime);
 }
 
-void CheckAlarms(List<DateTime> alarms)
+void CheckAlarms(List<TimeOnly> alarms)
 {
     foreach (var alarm in alarms)
     {
-        if (alarm == DateTime.Now)
+        if (alarm.CompareHoursAndMinutesOnly(TimeOnly.FromDateTime(DateTime.Now)))
         {
-            //trigger
+            var result = false;
+
+            do
+            {
+                result = TriggerAlarm.Trigger(alarm);
+                Console.WriteLine("tentou o bagui");
+
+            } while (!result && alarm.CompareHoursAndMinutesOnly(TimeOnly.FromDateTime(DateTime.Now)));            
         }
     }
 }

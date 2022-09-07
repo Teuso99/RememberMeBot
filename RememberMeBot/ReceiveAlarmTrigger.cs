@@ -1,12 +1,19 @@
 ﻿using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using RememberMeBot.Resources;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace RememberMeBot.Worker
+namespace RememberMeBot
 {
-    public static class ReceiveAlarm
+    public static class ReceiveAlarmTrigger
     {
-        public static string Receive()
+        private static List<string> _alarmTriggers = new List<string>();
+
+        public static Task ReceiveTrigger()
         {
             try
             {
@@ -22,7 +29,7 @@ namespace RememberMeBot.Worker
                 {
                     var message = string.Empty;
 
-                    channel.QueueDeclare(queue: "createAlarm",
+                    channel.QueueDeclare(queue: "triggerAlarm",
                                          durable: true,
                                          exclusive: false,
                                          autoDelete: false,
@@ -36,22 +43,48 @@ namespace RememberMeBot.Worker
                     };
 
                     Thread.Sleep(5000);
-                    
-                    //while (string.IsNullOrEmpty(message))
-                    //{
-                        channel.BasicConsume(queue: "createAlarm",
-                                         autoAck: true,
-                                         consumer: consumer);
-                    //}
 
-                    return message;
+                    channel.BasicConsume(queue: "triggerAlarm",
+                                     autoAck: true,
+                                     consumer: consumer);
+
+
+                    if (!string.IsNullOrEmpty(message))
+                    {
+                        _alarmTriggers.Add(message);
+                    }
+                    
+                    return Task.CompletedTask;
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+                return Task.FromException(e);
+            }
+  
+        }
+
+        public static string TriggerAlarm()
+        {
+            ReceiveTrigger();
+
+            if (!_alarmTriggers.Any())
+            {
                 return string.Empty;
-            }            
+            }
+
+            foreach (var alarmMsg in _alarmTriggers)
+            {
+                var alarm = TimeOnly.Parse(alarmMsg);
+
+                if (alarm.CompareHoursAndMinutesOnly(TimeOnly.FromDateTime(DateTime.Now)))
+                {
+                    return alarmMsg;
+                }
+            }
+
+            return string.Empty;
         }
     }
 }

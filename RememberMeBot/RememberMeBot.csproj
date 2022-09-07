@@ -18,6 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\RememberMeBot.Resources\RememberMeBot.Resources.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="appsettings.Development.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
