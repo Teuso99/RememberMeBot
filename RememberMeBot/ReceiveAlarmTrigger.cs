@@ -1,4 +1,5 @@
-﻿using RabbitMQ.Client;
+﻿using DSharpPlus.Entities;
+using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RememberMeBot.Resources;
 using System;
@@ -64,13 +65,13 @@ namespace RememberMeBot
   
         }
 
-        public static string TriggerAlarm()
+        public static DiscordMessageBuilder? TriggerAlarm(DiscordUser? user = null)
         {
             ReceiveTrigger();
 
             if (!_alarmTriggers.Any())
             {
-                return string.Empty;
+                return null;
             }
 
             foreach (var alarmMsg in _alarmTriggers)
@@ -79,11 +80,17 @@ namespace RememberMeBot
 
                 if (alarm.CompareHoursAndMinutesOnly(TimeOnly.FromDateTime(DateTime.Now)))
                 {
-                    return alarmMsg;
+                    DiscordMessageBuilder msg = user != null 
+                        ? new DiscordMessageBuilder().WithContent($"{user.Mention}, it is {alarmMsg}!").WithAllowedMentions(new IMention[] { new UserMention(user) }) 
+                        : new DiscordMessageBuilder().WithContent($"It is {alarmMsg}");
+
+                    _alarmTriggers.Remove(alarmMsg);
+
+                    return msg;
                 }
             }
 
-            return string.Empty;
+            return null;
         }
     }
 }

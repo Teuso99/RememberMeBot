@@ -16,7 +16,12 @@ while (true)
 
     if (alarms.Any())
     {
-        CheckAlarms(alarms);
+        var result = CheckAlarms(alarms);
+
+        if (result != null)
+        {
+            alarms.Remove(result.Value);
+        }
     }
 }
 
@@ -27,7 +32,7 @@ void AddAlarm(string alarm)
     alarms.Add(alarmTime);
 }
 
-void CheckAlarms(List<TimeOnly> alarms)
+TimeOnly? CheckAlarms(List<TimeOnly> alarms)
 {
     foreach (var alarm in alarms)
     {
@@ -38,9 +43,12 @@ void CheckAlarms(List<TimeOnly> alarms)
             do
             {
                 result = TriggerAlarm.Trigger(alarm);
-                Console.WriteLine("tentou o bagui");
 
-            } while (!result && alarm.CompareHoursAndMinutesOnly(TimeOnly.FromDateTime(DateTime.Now)));            
+            } while (!result);
+
+            return alarm;
         }
     }
+
+    return null;
 }

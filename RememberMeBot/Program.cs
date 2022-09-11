@@ -24,16 +24,18 @@ client.AddRememberMeBot();
 await client.ConnectAsync();
 
 var channelId = Config.GetSection("ConnectionStrings")["ChannelId"];
-
 var channel = await client.GetChannelAsync(ulong.Parse(channelId));
+
+var userId = Config.GetSection("ConnectionStrings")["UserId"];
+var user = await client.GetUserAsync(ulong.Parse(userId));
 
 Console.WriteLine($"Bots onlines!");
 
 while (true)
 {
-    var msg = ReceiveAlarmTrigger.TriggerAlarm();
+    var msg = ReceiveAlarmTrigger.TriggerAlarm(user);
 
-    if (! string.IsNullOrEmpty(msg))
+    if (msg != null)
     {
         await client.SendMessageAsync(channel, msg);
     }
