@@ -35,14 +35,11 @@ namespace RememberMeBot.Worker
                         message = Encoding.UTF8.GetString(body);
                     };
 
+                    channel.BasicConsume(queue: "createAlarm",
+                                     autoAck: true,
+                                     consumer: consumer);
+
                     Thread.Sleep(5000);
-                    
-                    //while (string.IsNullOrEmpty(message))
-                    //{
-                        channel.BasicConsume(queue: "createAlarm",
-                                         autoAck: true,
-                                         consumer: consumer);
-                    //}
 
                     return message;
                 }

@@ -42,12 +42,11 @@ namespace RememberMeBot
                         message = Encoding.UTF8.GetString(body);
                     };
 
-                    Thread.Sleep(5000);
-
                     channel.BasicConsume(queue: "triggerAlarm",
                                      autoAck: true,
                                      consumer: consumer);
-
+                    
+                    Thread.Sleep(5000);
 
                     if (!string.IsNullOrEmpty(message))
                     {

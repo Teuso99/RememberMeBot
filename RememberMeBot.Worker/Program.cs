@@ -11,15 +11,11 @@ while (true)
 
     if (!string.IsNullOrEmpty(alarm))
     {
-        Console.WriteLine("ae pora pegou a queue");
-
         AddAlarm(alarm);
     }
 
     if (alarms.Any())
     {
-        Console.WriteLine("ae pora ta tentando mandar pra queue");
-
         CheckAlarms(alarms);
     }
 }
